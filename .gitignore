@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# build
+dist/
+build/
+
+# environment
+.env*
+!.env.example
+
+# logs
+*.log
+
+# system files
+.DS_Store
+Thumbs.db
+
+# VS / IDE files (🔥 THIS FIXES YOUR ERROR)
+.vs/
+.vscode/
+
+# coverage
+coverage/
+
+# misc
+*.local
