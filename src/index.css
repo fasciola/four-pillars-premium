@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  
+  --color-gold-300: #D4AF37;
+  --color-gold-400: #E5C35E;
+  
+  --color-luxury-black: #080808;
+  --color-luxury-charcoal: #0d0d0d;
+}
+
+@layer base {
+  body {
+    @apply bg-luxury-black text-[#F5F5F0] font-sans selection:bg-[#D4AF37]/30;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .noise-overlay {
+    @apply fixed inset-0 opacity-20 pointer-events-none z-50;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    mix-blend-mode: overlay;
+  }
+
+  .glass-card {
+    @apply bg-white/[0.03] backdrop-blur-[12px] border border-white/[0.08] rounded-[1px];
+  }
+
+  .stat-pill {
+    @apply bg-white/[0.05] px-3 py-1 rounded-full text-[10px] uppercase tracking-[1px] border border-white/[0.1] inline-flex items-center;
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+
+  .italic-small {
+    @apply text-[1rem] italic leading-normal opacity-60;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
