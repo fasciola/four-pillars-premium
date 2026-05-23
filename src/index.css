@@ -20,11 +20,12 @@
 }
 
 @layer utilities {
-  .noise-overlay {
-    @apply fixed inset-0 opacity-20 pointer-events-none z-50;
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    mix-blend-mode: overlay;
-  }
+    /* Replace the noise overlay URL with a working one */
+    .noise-overlay {
+        @apply fixed inset-0 opacity-20 pointer-events-none z-50;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+    }
 
   .glass-card {
     @apply bg-white/[0.03] backdrop-blur-[12px] border border-white/[0.08] rounded-[1px];

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ChevronDown } from 'lucide-react';
+import heroBg from '../assets/images/hero-bg.webp';
 
 const Hero: React.FC = () => {
   return (
@@ -8,10 +8,12 @@ const Hero: React.FC = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop"
+          src={heroBg}
           alt="Dubai Skyline Cinematic"
           className="w-full h-full object-cover grayscale opacity-40"
-          referrerPolicy="no-referrer"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-luxury-black/90 via-luxury-black/20 to-luxury-black" />
       </div>
@@ -22,10 +24,8 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
         >
-          
           <h1 className="font-serif text-5xl md:text-8xl font-light tracking-tight mb-8 leading-[0.9]">
             Architects of <br /> 
-            
           </h1>
           <p className="max-w-md mx-auto text-white/50 text-sm leading-relaxed mb-12 font-light">
             End-to-end business setup and digital growth solutions for visionary brands entering the Saudi and Emirati markets. We provide the structural integrity your business deserves.
