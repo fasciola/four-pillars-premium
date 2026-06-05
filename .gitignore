@@ -1,27 +1,26 @@
-# dependencies
-node_modules/
+# Examples 1:
+(empty — output nothing)
 
-# build
+# Example 2 (Project with artifacts):
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
 dist/
 build/
-
-# environment
-.env*
-!.env.example
-
-# logs
+# Dependencies
+.venv/
+venv/
+node_modules/
+# Logs and temp files
 *.log
-
-# system files
-.DS_Store
-Thumbs.db
-
-# VS / IDE files (🔥 THIS FIXES YOUR ERROR)
-.vs/
+*.tmp
+*.swp
+# Environment
+.env
+.env.local
+.env.*
+# Editors
 .vscode/
-
-# coverage
-coverage/
-
-# misc
-*.local
+.idea/
