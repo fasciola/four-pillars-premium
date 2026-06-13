@@ -6,15 +6,14 @@ const WEB3FORMS_ACCESS_KEY = '65f0cc0b-f4b2-4e43-895d-3af6e1f9146e';
 
 const Contact: React.FC = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
-    const [formError, setFormError] = useState(false);
+    const [formError, setFormError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
-        fullName: '',
+        name: '',
         email: '',
         phone: '',
         service: '',
-        message: '',
-        botField: ''
+        message: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -24,13 +23,18 @@ const Contact: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setFormError(false);
+        setFormError('');
         setIsSubmitting(true);
 
-        const submission = new FormData(e.currentTarget);
+        const submission = new FormData();
         submission.append('access_key', WEB3FORMS_ACCESS_KEY);
         submission.append('subject', 'New consultation request from Four Pillars website');
         submission.append('from_name', 'Four Pillars Website');
+        submission.append('name', formData.name);
+        submission.append('email', formData.email);
+        submission.append('phone', formData.phone);
+        submission.append('service', formData.service);
+        submission.append('message', formData.message);
 
         try {
             const response = await fetch('https://api.web3forms.com/submit', {
@@ -40,21 +44,20 @@ const Contact: React.FC = () => {
 
             const data = await response.json();
 
-            if (!data.success) {
+            if (!response.ok || !data.success) {
                 throw new Error(data.message || 'Web3Forms submission failed');
             }
 
             setFormSubmitted(true);
             setFormData({
-                fullName: '',
+                name: '',
                 email: '',
                 phone: '',
                 service: '',
-                message: '',
-                botField: ''
+                message: ''
             });
         } catch (error) {
-            setFormError(true);
+            setFormError(error instanceof Error ? error.message : 'Something went wrong. Please try again or contact us by WhatsApp.');
         } finally {
             setIsSubmitting(false);
         }
@@ -96,15 +99,10 @@ const Contact: React.FC = () => {
                                 </motion.div>
                             ) : (
                                 <form onSubmit={handleSubmit} className="space-y-8">
-                                    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-                                    <input type="hidden" name="subject" value="New consultation request from Four Pillars website" />
-                                    <input type="hidden" name="from_name" value="Four Pillars Website" />
-                                    <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
-
                                     {formError && (
-                                        <div className="flex items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-red-300 text-sm">
-                                            <AlertCircle size={18} />
-                                            Something went wrong. Please try again or contact us by WhatsApp.
+                                        <div className="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-red-300 text-sm">
+                                            <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+                                            <span>{formError}</span>
                                         </div>
                                     )}
 
@@ -112,8 +110,8 @@ const Contact: React.FC = () => {
                                         <div className="relative group">
                                             <input
                                                 type="text"
-                                                name="fullName"
-                                                value={formData.fullName}
+                                                name="name"
+                                                value={formData.name}
                                                 onChange={handleInputChange}
                                                 required
                                                 placeholder="Full Name"
