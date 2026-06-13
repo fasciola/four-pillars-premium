@@ -16,6 +16,7 @@ const Navbar: React.FC = () => {
 
     const navLinks = [
         { name: 'Business Setup', href: '#business-setup' },
+        { name: 'Ajman Cost Guide', href: '#ajman-license-cost-visa' },
         { name: 'Digital Marketing', href: '#digital-marketing' },
         { name: 'UAE vs KSA', href: '#comparison' },
         { name: 'Process', href: '#process' },
@@ -39,8 +40,7 @@ const Navbar: React.FC = () => {
                     </span>
                 </a>
 
-                {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-10">
+                <div className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <a
                             key={link.name}
@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
                             {link.name}
                         </a>
                     ))}
-                    <div className="h-4 w-px bg-slate-800 mx-2" />
+                    <div className="h-4 w-px bg-slate-800 mx-1" />
                     <div className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold select-none font-mono">
                         WhatsApp <a href="https://wa.me/971567074922" target="_blank" rel="noopener noreferrer" className="ml-2 text-white font-normal hover:text-emerald-400 transition-colors cursor-pointer">+971 56 707 4922</a>
                     </div>
@@ -62,7 +62,6 @@ const Navbar: React.FC = () => {
                     </a>
                 </div>
 
-                {/* Mobile Toggle */}
                 <button
                     className="md:hidden text-slate-200"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -72,7 +71,6 @@ const Navbar: React.FC = () => {
                 </button>
             </div>
 
-            {/* Mobile Menu */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -98,7 +96,7 @@ const Navbar: React.FC = () => {
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="w-full py-3 bg-emerald-400 text-slate-950 text-center rounded-full text-xs uppercase tracking-widest font-bold block font-mono"
                             >
-                                Book a Consultation
+                                Consultation
                             </a>
                         </div>
                     </motion.div>
