@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 const Navbar: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const isBlogPage = window.location.pathname === '/blog/ajman-license-cost-visa';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -14,21 +15,27 @@ const Navbar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navLinks = [
-        { name: 'Business Setup', href: '#business-setup' },
-        { name: 'Ajman Cost Guide', href: '#ajman-license-cost-visa' },
-        { name: 'Digital Marketing', href: '#digital-marketing' },
-        { name: 'UAE vs KSA', href: '#comparison' },
-        { name: 'Process', href: '#process' },
-    ];
+    const navLinks = isBlogPage
+        ? [
+            { name: 'Home', href: '/' },
+            { name: 'Calculator', href: '/#ajman-license-calculator' },
+            { name: 'Contact', href: '#contact' },
+        ]
+        : [
+            { name: 'Business Setup', href: '#business-setup' },
+            { name: 'Cost Calculator', href: '#ajman-license-calculator' },
+            { name: 'Cost Guide', href: '/blog/ajman-license-cost-visa' },
+            { name: 'Digital Marketing', href: '#digital-marketing' },
+            { name: 'Process', href: '#process' },
+        ];
 
     return (
         <nav
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-4 bg-luxury-black/95 backdrop-blur-md border-b border-slate-800' : 'py-6 bg-transparent'
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled || isBlogPage ? 'py-4 bg-luxury-black/95 backdrop-blur-md border-b border-slate-800' : 'py-6 bg-transparent'
                 }`}
         >
             <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-                <a href="#" className="flex items-center gap-3">
+                <a href="/" className="flex items-center gap-3">
                     <div className="w-8 h-8 flex flex-wrap gap-1">
                         <div className="w-3 h-3 bg-emerald-500 rounded-sm" />
                         <div className="w-3 h-3 border border-slate-700 rounded-sm" />
@@ -51,9 +58,14 @@ const Navbar: React.FC = () => {
                         </a>
                     ))}
                     <div className="h-4 w-px bg-slate-800 mx-1" />
-                    <div className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold select-none font-mono">
-                        WhatsApp <a href="https://wa.me/971567074922" target="_blank" rel="noopener noreferrer" className="ml-2 text-white font-normal hover:text-emerald-400 transition-colors cursor-pointer">+971 56 707 4922</a>
-                    </div>
+                    <a
+                        href="https://wa.me/971567074922"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold hover:text-white transition-colors font-mono"
+                    >
+                        WhatsApp +971 56 707 4922
+                    </a>
                     <a
                         href="#contact"
                         className="px-6 py-2 bg-emerald-400 text-slate-950 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-300 transition-all rounded-full font-mono shadow-sm shadow-emerald-400/5"
