@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Phone, MapPin, Send, Check } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Check, AlertCircle } from 'lucide-react';
+
+const encodeFormData = (data: Record<string, string>) => {
+    return new URLSearchParams(data).toString();
+};
 
 const Contact: React.FC = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [formError, setFormError] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
         phone: '',
         service: '',
-        message: ''
+        message: '',
+        botField: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -17,20 +23,37 @@ const Contact: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate real database or email dispatch securely
-        setFormSubmitted(true);
-        setTimeout(() => {
-            setFormSubmitted(false);
+        setFormError(false);
+
+        try {
+            await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodeFormData({
+                    'form-name': 'contact',
+                    fullName: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    service: formData.service,
+                    message: formData.message,
+                    botField: formData.botField
+                })
+            });
+
+            setFormSubmitted(true);
             setFormData({
                 fullName: '',
                 email: '',
                 phone: '',
                 service: '',
-                message: ''
+                message: '',
+                botField: ''
             });
-        }, 4000);
+        } catch (error) {
+            setFormError(true);
+        }
     };
 
     return (
@@ -45,7 +68,6 @@ const Contact: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                        {/* Form Side */}
                         <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-slate-800">
                             {formSubmitted ? (
                                 <motion.div
@@ -58,11 +80,39 @@ const Contact: React.FC = () => {
                                     </div>
                                     <h3 className="font-serif text-2xl text-white mb-2 font-bold">Message Dispatched</h3>
                                     <p className="text-slate-400 font-light text-sm max-w-sm">
-                                        Thank you. A senior legal consultant has been assigned to your query and will contact you via phone or secure electronic mail within 2 hours.
+                                        Thank you. Your consultation request has been received. We will contact you by phone or email shortly.
                                     </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormSubmitted(false)}
+                                        className="mt-8 px-6 py-3 border border-emerald-400/30 rounded-full text-emerald-400 text-[10px] uppercase tracking-widest font-bold hover:bg-emerald-400/10 transition-colors font-mono"
+                                    >
+                                        Send Another Message
+                                    </button>
                                 </motion.div>
                             ) : (
-                                <form onSubmit={handleSubmit} className="space-y-8">
+                                <form
+                                    name="contact"
+                                    method="POST"
+                                    data-netlify="true"
+                                    netlify-honeypot="botField"
+                                    onSubmit={handleSubmit}
+                                    className="space-y-8"
+                                >
+                                    <input type="hidden" name="form-name" value="contact" />
+                                    <p className="hidden">
+                                        <label>
+                                            Do not fill this out: <input name="botField" value={formData.botField} onChange={handleInputChange} />
+                                        </label>
+                                    </p>
+
+                                    {formError && (
+                                        <div className="flex items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-red-300 text-sm">
+                                            <AlertCircle size={18} />
+                                            Something went wrong. Please try again or contact us by WhatsApp.
+                                        </div>
+                                    )}
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="relative group">
                                             <input
@@ -109,9 +159,10 @@ const Contact: React.FC = () => {
                                                 className="w-full bg-transparent border-b border-slate-800 py-4 text-sm font-light focus:outline-none focus:border-emerald-400 transition-all text-slate-400 bg-slate-900"
                                             >
                                                 <option value="" disabled className="text-slate-600">Interested Service</option>
-                                                <option value="setup" className="text-white bg-slate-900">Business Setup</option>
-                                                <option value="marketing" className="text-white bg-slate-900">Digital Marketing</option>
-                                                <option value="both" className="text-white bg-slate-900">Both Solutions</option>
+                                                <option value="Business Setup" className="text-white bg-slate-900">Business Setup</option>
+                                                <option value="Digital Marketing" className="text-white bg-slate-900">Digital Marketing</option>
+                                                <option value="Both Solutions" className="text-white bg-slate-900">Both Solutions</option>
+                                                <option value="Ajman License Package" className="text-white bg-slate-900">Ajman License Package</option>
                                             </select>
                                         </div>
                                     </div>
@@ -140,7 +191,6 @@ const Contact: React.FC = () => {
                             )}
                         </div>
 
-                        {/* Info Side */}
                         <div className="p-8 md:p-12 bg-slate-900/20 flex flex-col justify-between">
                             <div className="space-y-12 text-left">
                                 <div className="flex gap-6">
