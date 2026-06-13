@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calculator, CheckCircle2, MessageCircle } from 'lucide-react';
 
@@ -13,15 +13,15 @@ const packages = [
     { visas: 7, label: '7 Visas', registration: 38700, renewal: 31950 },
 ];
 
-const addOns = [
-    { id: 'visa-allocation', label: 'Visa Allocation Fee', price: 1000 },
-    { id: 'security', label: 'Security Pre-Approval', price: 200 },
-    { id: 'establishment-card', label: 'Establishment Card', price: 500 },
-    { id: 'e-channel', label: 'E-Channel', price: 2300 },
-    { id: 'entry-permit', label: 'Entry Permit', price: 950 },
-    { id: 'status-change', label: 'Visa Status Change', price: 800 },
-    { id: 'medical', label: 'Medical', price: 350 },
-    { id: 'residence-eid', label: 'Residence Visa / Emirates ID', price: 1900 },
+const visaCostItems = [
+    { label: 'Visa Allocation Fee', price: 1000 },
+    { label: 'Security Pre-Approval', price: 200 },
+    { label: 'Establishment Card', price: 500 },
+    { label: 'E-Channel', price: 2300 },
+    { label: 'Entry Permit', price: 950 },
+    { label: 'Visa Status Change', price: 800 },
+    { label: 'Medical', price: 350 },
+    { label: 'Residence Visa / Emirates ID', price: 1900 },
 ];
 
 const formatAED = (amount: number) => `AED ${amount.toLocaleString('en-AE')}`;
@@ -29,27 +29,12 @@ const formatAED = (amount: number) => `AED ${amount.toLocaleString('en-AE')}`;
 const AjmanCostCalculator: React.FC = () => {
     const [selectedVisas, setSelectedVisas] = useState(1);
     const [costType, setCostType] = useState<'registration' | 'renewal'>('registration');
-    const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
     const selectedPackage = packages.find((item) => item.visas === selectedVisas) ?? packages[1];
-    const packageCost = selectedPackage[costType];
-
-    const addOnTotal = useMemo(() => {
-        return addOns
-            .filter((item) => selectedAddOns.includes(item.id))
-            .reduce((total, item) => total + item.price, 0);
-    }, [selectedAddOns]);
-
-    const total = packageCost + addOnTotal;
-
-    const toggleAddOn = (id: string) => {
-        setSelectedAddOns((current) =>
-            current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
-        );
-    };
+    const total = selectedPackage[costType];
 
     const whatsAppText = encodeURIComponent(
-        `Hello 4Pillars, I used the Ajman license cost calculator. I selected ${selectedPackage.label}, ${costType === 'registration' ? 'new registration' : 'renewal'}, estimated total ${formatAED(total)}. Please confirm the quotation.`
+        `Hello 4Pillars, I used the Ajman license cost calculator. I selected ${selectedPackage.label}, ${costType === 'registration' ? 'new registration' : 'renewal'}, estimated package total ${formatAED(total)}. Please confirm the quotation.`
     );
 
     return (
@@ -66,10 +51,10 @@ const AjmanCostCalculator: React.FC = () => {
                         <Calculator size={15} /> Ajman License Cost Calculator
                     </span>
                     <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-tight mb-6">
-                        Calculate your Ajman license and visa cost
+                        Calculate your Ajman license and visa package
                     </h2>
                     <p className="text-slate-400 text-sm md:text-base leading-relaxed font-light max-w-3xl mx-auto">
-                        Select the number of visas, choose new registration or renewal, then add any extra service requests to get an instant estimated cost.
+                        Select the number of visas and choose new registration or renewal. The visa and Emirates ID cost items are shown as part of the package calculation, not as a separate payment.
                     </p>
                 </motion.div>
 
@@ -115,36 +100,36 @@ const AjmanCostCalculator: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold font-mono mb-4">Optional additional service requests</label>
+                            <label className="block text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold font-mono mb-4">Visa and Emirates ID cost items</label>
+                            <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-5 mb-4">
+                                <p className="text-sm text-slate-300 leading-relaxed">
+                                    These items are considered part of the visa and Emirates ID processing cost inside the package. They are displayed for transparency and are not added again to the total.
+                                </p>
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {addOns.map((item) => {
-                                    const checked = selectedAddOns.includes(item.id);
-                                    return (
-                                        <button
-                                            key={item.id}
-                                            type="button"
-                                            onClick={() => toggleAddOn(item.id)}
-                                            className={`flex items-center justify-between gap-4 rounded-2xl border px-4 py-4 text-left transition-all ${checked ? 'border-emerald-400 bg-emerald-400/10' : 'border-slate-800 bg-slate-950/40 hover:border-slate-700'}`}
-                                        >
-                                            <span className="flex items-center gap-3">
-                                                <span className={`w-5 h-5 rounded-full border flex items-center justify-center ${checked ? 'border-emerald-400 bg-emerald-400 text-slate-950' : 'border-slate-700'}`}>
-                                                    {checked && <CheckCircle2 size={14} />}
-                                                </span>
-                                                <span className="text-xs text-slate-300 font-semibold">{item.label}</span>
+                                {visaCostItems.map((item) => (
+                                    <div
+                                        key={item.label}
+                                        className="flex items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/40 px-4 py-4 text-left"
+                                    >
+                                        <span className="flex items-center gap-3">
+                                            <span className="w-5 h-5 rounded-full border border-emerald-400 bg-emerald-400 text-slate-950 flex items-center justify-center">
+                                                <CheckCircle2 size={14} />
                                             </span>
-                                            <span className="text-xs text-emerald-300 font-bold whitespace-nowrap">{formatAED(item.price)}</span>
-                                        </button>
-                                    );
-                                })}
+                                            <span className="text-xs text-slate-300 font-semibold">{item.label}</span>
+                                        </span>
+                                        <span className="text-xs text-emerald-300 font-bold whitespace-nowrap">{formatAED(item.price)}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     <aside className="lg:sticky lg:top-28 rounded-[2rem] border border-emerald-400/20 bg-gradient-to-br from-emerald-400/15 via-slate-900 to-slate-950 p-6 md:p-8 text-left shadow-2xl shadow-emerald-950/20">
-                        <span className="text-[10px] uppercase tracking-[0.35em] text-emerald-300 font-bold font-mono block mb-4">Estimated Total</span>
+                        <span className="text-[10px] uppercase tracking-[0.35em] text-emerald-300 font-bold font-mono block mb-4">Estimated Package Total</span>
                         <div className="font-serif text-5xl md:text-6xl text-white font-black mb-3">{formatAED(total)}</div>
                         <p className="text-slate-400 text-xs leading-relaxed mb-8">
-                            This is an estimate based on the selected package and optional service requests. Final quotation may vary depending on activity, approvals, and document requirements.
+                            This is an estimate based on the selected license and visa package. The listed visa and Emirates ID items are included in the package estimate and are not separate add-on payments.
                         </p>
 
                         <div className="space-y-3 mb-8">
@@ -153,12 +138,12 @@ const AjmanCostCalculator: React.FC = () => {
                                 <span className="text-white text-xs font-bold">{selectedPackage.label}</span>
                             </div>
                             <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                                <span className="text-slate-400 text-xs">Package cost</span>
-                                <span className="text-white text-xs font-bold">{formatAED(packageCost)}</span>
+                                <span className="text-slate-400 text-xs">Package type</span>
+                                <span className="text-white text-xs font-bold">{costType === 'registration' ? 'New Registration' : 'Renewal'}</span>
                             </div>
                             <div className="flex justify-between gap-4 border-b border-white/10 pb-3">
-                                <span className="text-slate-400 text-xs">Add-ons</span>
-                                <span className="text-white text-xs font-bold">{formatAED(addOnTotal)}</span>
+                                <span className="text-slate-400 text-xs">Visa / Emirates ID items</span>
+                                <span className="text-white text-xs font-bold">Included</span>
                             </div>
                         </div>
 
