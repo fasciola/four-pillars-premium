@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import LicenseOfferAd from './components/LicenseOfferAd';
 import Partners from './components/Partners';
 import BusinessSetup from './components/BusinessSetup';
 import DigitalMarketing from './components/DigitalMarketing';
 import Comparison from './components/Comparison';
 import Process from './components/Process';
 import WhyUs from './components/WhyUs';
+import AjmanLicenseBlog from './components/AjmanLicenseBlog';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ScrollLightRing from './components/ScrollLightRing';
@@ -49,6 +51,7 @@ function App() {
             {/* Main Sections */}
             <main className="relative z-10">
                 <Hero />
+                <LicenseOfferAd />
                 <Partners />
 
                 <div className="relative z-10 bg-luxury-black">
@@ -57,6 +60,7 @@ function App() {
                     <Comparison />
                     <Process />
                     <WhyUs />
+                    <AjmanLicenseBlog />
                     <Contact />
                 </div>
             </main>
