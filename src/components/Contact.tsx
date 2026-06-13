@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, Check, AlertCircle } from 'lucide-react';
 
-const encodeFormData = (data: Record<string, string>) => {
-    return new URLSearchParams(data).toString();
-};
+const WEB3FORMS_ACCESS_KEY = '65f0cc0b-f4b2-4e43-895d-3af6e1f9146e';
 
 const Contact: React.FC = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formError, setFormError] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -23,24 +22,27 @@ const Contact: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormError(false);
+        setIsSubmitting(true);
+
+        const submission = new FormData(e.currentTarget);
+        submission.append('access_key', WEB3FORMS_ACCESS_KEY);
+        submission.append('subject', 'New consultation request from Four Pillars website');
+        submission.append('from_name', 'Four Pillars Website');
 
         try {
-            await fetch('/', {
+            const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: encodeFormData({
-                    'form-name': 'contact',
-                    fullName: formData.fullName,
-                    email: formData.email,
-                    phone: formData.phone,
-                    service: formData.service,
-                    message: formData.message,
-                    botField: formData.botField
-                })
+                body: submission
             });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'Web3Forms submission failed');
+            }
 
             setFormSubmitted(true);
             setFormData({
@@ -53,6 +55,8 @@ const Contact: React.FC = () => {
             });
         } catch (error) {
             setFormError(true);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -78,9 +82,9 @@ const Contact: React.FC = () => {
                                     <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 border border-emerald-500/20">
                                         <Check size={32} />
                                     </div>
-                                    <h3 className="font-serif text-2xl text-white mb-2 font-bold">Message Dispatched</h3>
+                                    <h3 className="font-serif text-2xl text-white mb-2 font-bold">Message Sent</h3>
                                     <p className="text-slate-400 font-light text-sm max-w-sm">
-                                        Thank you. Your consultation request has been received. We will contact you by phone or email shortly.
+                                        Thank you. Your consultation request has been sent successfully. We will contact you by phone or email shortly.
                                     </p>
                                     <button
                                         type="button"
@@ -91,20 +95,11 @@ const Contact: React.FC = () => {
                                     </button>
                                 </motion.div>
                             ) : (
-                                <form
-                                    name="contact"
-                                    method="POST"
-                                    data-netlify="true"
-                                    netlify-honeypot="botField"
-                                    onSubmit={handleSubmit}
-                                    className="space-y-8"
-                                >
-                                    <input type="hidden" name="form-name" value="contact" />
-                                    <p className="hidden">
-                                        <label>
-                                            Do not fill this out: <input name="botField" value={formData.botField} onChange={handleInputChange} />
-                                        </label>
-                                    </p>
+                                <form onSubmit={handleSubmit} className="space-y-8">
+                                    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+                                    <input type="hidden" name="subject" value="New consultation request from Four Pillars website" />
+                                    <input type="hidden" name="from_name" value="Four Pillars Website" />
+                                    <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
 
                                     {formError && (
                                         <div className="flex items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-red-300 text-sm">
@@ -183,9 +178,10 @@ const Contact: React.FC = () => {
                                         whileHover={{ scale: 1.01 }}
                                         whileTap={{ scale: 0.99 }}
                                         type="submit"
-                                        className="w-full py-5 bg-emerald-400 text-slate-950 font-bold uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-3 transition-colors hover:bg-emerald-300 rounded-full cursor-pointer font-mono"
+                                        disabled={isSubmitting}
+                                        className="w-full py-5 bg-emerald-400 text-slate-950 font-bold uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-3 transition-colors hover:bg-emerald-300 disabled:opacity-60 disabled:cursor-not-allowed rounded-full cursor-pointer font-mono"
                                     >
-                                        Request Consultation <Send size={14} />
+                                        {isSubmitting ? 'Sending...' : 'Request Consultation'} <Send size={14} />
                                     </motion.button>
                                 </form>
                             )}
