@@ -30,7 +30,7 @@ const LicenseOfferAd: React.FC = () => {
 
                         <div className="flex flex-col sm:flex-row gap-4">
                             <a
-                                href="#ajman-license-cost-visa"
+                                href="/blog/ajman-license-cost-visa"
                                 className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400 px-7 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-950 hover:bg-emerald-300 transition-colors font-mono"
                             >
                                 Read Cost Guide <ArrowRight size={16} />
