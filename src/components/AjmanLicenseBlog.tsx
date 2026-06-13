@@ -13,7 +13,7 @@ const priceRows = [
     ['7 Visas', 'AED 38,700', 'AED 31,950'],
 ];
 
-const serviceCharges = [
+const visaCostItems = [
     ['Visa Allocation Fee', 'AED 1,000'],
     ['Security Pre-Approval', 'AED 200'],
     ['Establishment Card', 'AED 500'],
@@ -38,8 +38,8 @@ const faqs = [
         answer: 'Renewal starts from AED 4,888 for the 0 visa package. A 1 visa renewal package costs AED 9,900 after discount.',
     },
     {
-        question: 'Can I add more visas later?',
-        answer: 'Yes. Additional visa-related services can be requested later, and extra charges may apply depending on the service required.',
+        question: 'Are visa and Emirates ID charges separate payments?',
+        answer: 'No. The visa and Emirates ID cost items are treated as part of the selected license and visa package. They are shown for transparency and should not be added again as a separate payment.',
     },
 ];
 
@@ -59,7 +59,7 @@ const AjmanLicenseBlog: React.FC = () => {
                         Cost of a Trade License with Visa in Ajman
                     </h1>
                     <p className="text-slate-400 text-sm md:text-base leading-relaxed font-light max-w-3xl mx-auto" itemProp="description">
-                        Looking for the cost of a license with visa in Ajman? This guide explains the package prices, renewal fees, included services, and additional charges so you can plan your UAE company setup with confidence.
+                        Looking for the cost of a license with visa in Ajman? This guide explains the package prices, renewal fees, included services, and visa and Emirates ID cost items so you can plan your UAE company setup with confidence.
                     </p>
                 </motion.header>
 
@@ -109,12 +109,12 @@ const AjmanLicenseBlog: React.FC = () => {
                         </section>
 
                         <section className="glass-card p-6 md:p-8">
-                            <h2 className="font-serif text-3xl md:text-4xl text-white font-bold mb-5">Additional fees per service request</h2>
+                            <h2 className="font-serif text-3xl md:text-4xl text-white font-bold mb-5">Visa and Emirates ID cost items</h2>
                             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                                Some services may be charged separately if requested outside the package or if additional visa processing is required.
+                                The following items are considered part of the visa and Emirates ID processing cost within the selected package. They are shown for transparency and should not be calculated as a separate payment on top of the package price.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {serviceCharges.map(([service, charge]) => (
+                                {visaCostItems.map(([service, charge]) => (
                                     <div key={service} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/40 px-5 py-4">
                                         <span className="text-slate-300 text-xs font-semibold">{service}</span>
                                         <span className="text-emerald-300 text-xs font-bold whitespace-nowrap">{charge}</span>
@@ -156,8 +156,8 @@ const AjmanLicenseBlog: React.FC = () => {
                             </a>
                         </div>
                         <div className="rounded-[1.75rem] border border-slate-800 bg-slate-900/60 p-6 text-left">
-                            <h3 className="font-serif text-2xl text-white font-bold mb-3">SEO keywords covered</h3>
-                            <p className="text-slate-500 text-xs leading-relaxed">trade license cost Ajman, Ajman business license cost, trade license with visa Ajman, Ajman trade license renewal cost, trade license fees in Ajman.</p>
+                            <h3 className="font-serif text-2xl text-white font-bold mb-3">Important pricing note</h3>
+                            <p className="text-slate-500 text-xs leading-relaxed">Visa and Emirates ID cost items are included in the package estimate. They are not separate add-on payments.</p>
                         </div>
                     </aside>
                 </div>
